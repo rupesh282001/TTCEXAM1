@@ -4,82 +4,91 @@
 <meta charset="UTF-8">
 <title>Secure Descriptive Exam</title>
 
-<!-- Browser Tab Icon -->
 <link rel="icon" type="image/png" href="image.png">
-
 <script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+@keyframes scrollRightToLeft {
+  0% { transform: translateX(100%); opacity: 1; }
+  100% { transform: translateX(-100%); opacity: 1; }
+}
+.scrolling-question {
+  white-space: nowrap;
+  animation: scrollRightToLeft 10s linear forwards;
+}
+</style>
 </head>
 
 <body class="bg-slate-100 h-screen overflow-hidden flex items-center justify-center">
 
 <div class="bg-white shadow-2xl rounded-xl w-full max-w-xl p-6 max-h-[90vh] overflow-hidden">
 
-  <!-- LOGIN -->
-  <div id="login">
+<!-- LOGIN -->
+<div id="login">
+  <div class="flex justify-center mb-4">
+    <img src="THECOS_Google_Form_Header.png" class="max-h-24 object-contain">
+  </div>
 
-    <!-- 🔹 HEADER IMAGE -->
-    <div class="flex justify-center mb-4">
-      <img
-        src="THECOS_Google_Form_Header.png"
-        alt="THECOS Header"
-        class="max-h-24 object-contain"
-      />
+  <h1 class="text-2xl font-bold text-center mb-4">Online Exam</h1>
+
+  <input id="studentName" class="w-full border p-2 mb-3 rounded"
+         placeholder="Enter Full Name">
+
+  <input id="studentEmail" type="email"
+         class="w-full border p-2 mb-3 rounded"
+         placeholder="Enter Email Address">
+
+  <!-- ROLE SELECT -->
+  <select id="studentRole"
+          class="w-full border p-2 mb-4 rounded">
+    <option value="">Select Role</option>
+    <option value="assistant">Assistant Secretary</option>
+    <option value="junior">Junior Executive</option>
+  </select>
+
+  <button onclick="startExam()"
+          class="w-full bg-blue-600 text-white py-2 rounded">
+    Start Exam
+  </button>
+</div>
+
+<!-- EXAM -->
+<div id="exam" class="hidden h-full flex flex-col">
+
+  <div class="flex justify-between mb-3">
+    <span id="timer" class="text-red-600 font-bold"></span>
+    <span class="text-sm text-gray-500">
+      Copy / Paste / Tab switch disabled
+    </span>
+  </div>
+
+  <div class="flex-1 overflow-y-auto pr-2">
+    <div class="overflow-hidden mb-3">
+      <h2 id="question" class="font-semibold text-lg"></h2>
     </div>
 
-    <h1 class="text-2xl font-bold text-center mb-4">Online Exam</h1>
+    <textarea id="answer"
+      class="w-full border p-3 h-60 resize-none"
+      placeholder="Type your answer here..."
+      onpaste="return false"
+      oncopy="return false"
+      oncut="return false"></textarea>
+  </div>
 
-    <input id="studentName" type="text" placeholder="Enter Full Name"
-      class="w-full border rounded p-2 mb-3">
-
-    <input id="studentEmail" type="email" placeholder="Enter Email Address"
-      class="w-full border rounded p-2 mb-4">
-
-    <button onclick="startExam()"
-      class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-      Start Exam
+  <div class="pt-3 border-t">
+    <button onclick="nextQuestion()"
+            class="bg-green-600 text-white px-5 py-2 rounded">
+      Next
     </button>
   </div>
 
-  <!-- EXAM -->
-  <div id="exam" class="hidden h-full flex flex-col">
-
-    <!-- HEADER -->
-    <div class="flex justify-between items-center mb-3">
-      <span id="timer" class="text-red-600 font-bold text-lg"></span>
-      <span class="text-sm text-gray-500">
-        Copy / Paste / Tab switch disabled
-      </span>
-    </div>
-
-    <!-- SCROLLABLE CONTENT -->
-    <div id="scrollArea" class="flex-1 overflow-y-auto pr-2">
-
-      <h2 id="question" class="font-semibold text-lg mb-3"></h2>
-
-      <textarea id="answer"
-        class="w-full border rounded p-3 h-60 mb-4 resize-none"
-        placeholder="Type your answer here..."
-        onpaste="return false"
-        oncopy="return false"
-        oncut="return false"></textarea>
-
-    </div>
-
-    <!-- FOOTER -->
-    <div class="pt-3 border-t">
-      <button onclick="nextQuestion()"
-        class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
-        Next
-      </button>
-    </div>
-
-  </div>
-
+</div>
 </div>
 
 <script>
-/* ================= CONFIG ================= */
-const QUESTIONS =[
+/* ================= QUESTION BANKS ================= */
+
+const QUESTIONS_ASSISTANT_SECRETARY = [
   "What is a Co-operative Society? Explain its main objectives.",
   "Write the principles of Co-operation.",
   "What is a Credit Co-operative Society? Explain its functions.",
@@ -132,38 +141,162 @@ const QUESTIONS =[
   "If the Assistant Secretary post is not given to you, how will it affect the organisation?"
 ];
 
-const QUESTION_VISIBLE_TIME = 10; // seconds
-const ANSWER_TIME = 30;          // seconds
-/* ========================================= */
+const QUESTIONS_JUNIOR_EXECUTIVE = [
+"Finance is the management of money, including raising, allocating, and utilizing funds. It is important because it ensures smooth operations, profitability, growth, and long-term survival of an organization.",
 
-let studentName = "";
-let studentEmail = "";
-let answers = [];
-let index = 0;
+"Financial Planning is the process of estimating future financial needs and deciding how funds will be acquired and used to achieve organizational goals efficiently.",
 
-let answerTimeLeft;
-let answerTimer;
-let questionTimer;
+"The main objectives of Financial Management are profit maximization, wealth maximization, efficient utilization of funds, financial stability, and risk management.",
 
+"Working Capital is the difference between current assets and current liabilities. It is important because it ensures liquidity and smooth day-to-day operations.",
+
+"Capital Expenditure is expenditure on long-term assets like buildings and machinery, whereas Revenue Expenditure is incurred on routine operational expenses such as wages and electricity.",
+
+"Budgeting is the process of preparing a financial plan for a specific period. Its advantages include cost control, better planning, coordination, and performance evaluation.",
+
+"Cash Flow refers to the movement of cash into and out of a business and helps ensure the organization can meet its financial obligations.",
+
+"Financial Statements are formal records such as the Balance Sheet, Income Statement, and Cash Flow Statement used for analysis, decision-making, and transparency.",
+
+"The role of a Junior Executive in the Finance Department includes maintaining accounts, preparing reports, handling invoices, and assisting audits.",
+
+"Internal Control in finance ensures accuracy of records, prevention of fraud, safeguarding of assets, and compliance with policies.",
+
+"A Co-operative is a voluntary association formed to promote the economic interests of its members through mutual help and democratic management.",
+
+"The objectives of the Co-operative Movement include mutual assistance, economic equality, social welfare, and protection of weaker sections.",
+
+"The principles of Co-operation include voluntary membership, democratic control, member participation, autonomy, education, and concern for the community.",
+
+"Types of Co-operative Societies include Consumer, Producer, Credit, Marketing, Housing, and Agricultural Co-operatives.",
+
+"Co-operatives contribute to economic development by generating employment, reducing exploitation, and promoting inclusive growth.",
+
+"The organizational structure of a Co-operative Society includes the General Body, Managing Committee, and administrative staff.",
+
+"The role of a Junior Executive in a Co-operative Society includes maintaining records, assisting management, and coordinating with members.",
+
+"Membership is important in a Co-operative Society because members are both owners and users, ensuring participation and shared benefits.",
+
+"Democratic Management in Co-operatives follows the principle of one member, one vote, ensuring equality and transparency.",
+
+"Co-operative Education and Training improve awareness, management skills, and efficiency of members and employees.",
+
+"Management is the process of planning, organizing, staffing, directing, and controlling resources to achieve organizational goals.",
+
+"The main functions of management are Planning, Organizing, Staffing, Directing, and Controlling.",
+
+"Planning involves deciding in advance what to do and how to do it to achieve objectives efficiently.",
+
+"Organizing is the process of arranging tasks, authority, and resources to achieve organizational goals.",
+
+"Staffing involves recruitment, selection, training, and development of employees and ensures the right people are placed in the right jobs.",
+
+"Motivation is the process of encouraging employees to work enthusiastically toward organizational goals.",
+
+"Leadership is the ability to influence others. Key qualities include integrity, confidence, communication skills, and decision-making ability.",
+
+"Communication is the exchange of information and is essential for coordination, decision-making, and effective management.",
+
+"Controlling ensures activities are performed as planned through setting standards, measuring performance, and corrective action.",
+
+"The role of a Junior Executive in an organization includes assisting management, supervising work, and implementing policies.",
+
+"Politics is the process of making collective decisions for society and is important for governance and public welfare.",
+
+"Democracy is a system of government in which power rests with the people, exercised directly or through representatives.",
+
+"The main functions of government include law-making, administration, defense, maintaining order, and public welfare.",
+
+"Political parties are organized groups that contest elections, form governments, and represent public interests.",
+
+"A Presidential system has a clear separation between executive and legislature, while a Parliamentary system has an executive responsible to the legislature.",
+
+"Political ideology is a set of beliefs and ideas that guide political behavior and policy-making.",
+
+"Separation of powers divides authority among the legislature, executive, and judiciary to prevent misuse of power.",
+
+"Elections are significant in a democracy as they ensure representation, accountability, and peaceful transfer of power.",
+
+"Civil rights are basic rights such as freedom of speech, equality before law, and the right to life.",
+
+"Public policy impacts society by influencing economic growth, social welfare, environmental protection, and governance.",
+
+"Environmental sustainability means using resources responsibly without compromising future generations and is vital for long-term business survival.",
+
+"The main causes of air pollution include industrial emissions, vehicle exhaust, burning of fossil fuels, and deforestation.",
+
+"Major types of waste include solid, liquid, hazardous, and electronic waste, which can be managed through recycling and safe disposal.",
+
+"Climate change affects the environment and businesses through extreme weather, rising costs, and resource scarcity.",
+
+"Environmental policies guide organizations to reduce environmental impact and comply with legal requirements.",
+
+"A carbon footprint is the total greenhouse gas emissions caused by activities and can be reduced through energy efficiency and renewable energy use.",
+
+"Renewable resources include solar and wind energy, while non-renewable resources include coal and petroleum.",
+
+"The circular economy focuses on reducing waste by reusing, recycling, and extending product life cycles.",
+
+"Businesses can contribute to environmental conservation by adopting green practices and reducing emissions.",
+
+"Environmental Impact Assessment evaluates the environmental effects of a project before approval to ensure sustainable development.",
+
+"The State Government formulates and implements policies related to education, health, agriculture, and law and order, facing challenges like limited resources.",
+
+"Evidence-based policymaking uses data and research to design effective policies and improve outcomes.",
+
+"Coordination between state departments and local bodies ensures efficient and effective policy implementation.",
+
+"Ethics and accountability in State Government administration promote transparency, trust, and good governance.",
+
+"Public participation improves policy outcomes by reflecting local needs and increasing acceptance.",
+
+"The role of a Junior Executive (Discipline) includes monitoring conduct, maintaining records, and assisting disciplinary authorities.",
+
+"Principles of natural justice ensure fairness through the right to be heard and absence of bias in disciplinary proceedings.",
+
+"Disciplinary inquiry involves issuing a charge sheet, conducting an inquiry, providing opportunity to defend, and passing orders.",
+
+"Balancing discipline and employee morale requires fairness, clear communication, and corrective approaches.",
+
+"Documentation in disciplinary matters is essential for legal validity, transparency, and accountability."
+]
+;
+
+/* ================================================= */
+
+const QUESTION_VISIBLE_TIME = 20;
+const ANSWER_TIME = 30;
+
+let QUESTIONS = [];   // dynamic
+let studentName = "", studentEmail = "", studentRole = "";
+let answers = [], index = 0;
+let questionTimer, answerTimer, answerTimeLeft;
 let examFinished = false;
 
-/* START EXAM */
+/* START */
 function startExam() {
   studentName = document.getElementById("studentName").value.trim();
   studentEmail = document.getElementById("studentEmail").value.trim();
+  studentRole = document.getElementById("studentRole").value;
 
-  if (!studentName || !studentEmail) {
-    return alert("Enter name and email address");
+  if (!studentName || !studentEmail || !studentRole) {
+    alert("Please enter Name, Email and select Role");
+    return;
   }
 
+  // Assign questions based on role
+  QUESTIONS = studentRole === "assistant"
+    ? QUESTIONS_ASSISTANT_SECRETARY
+    : QUESTIONS_JUNIOR_EXECUTIVE;
+
   resetState();
+
   document.getElementById("login").classList.add("hidden");
   document.getElementById("exam").classList.remove("hidden");
 
-  if (document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen();
-  }
-
+  document.documentElement.requestFullscreen?.();
   loadQuestion();
 }
 
@@ -176,19 +309,23 @@ function resetState() {
 
 /* LOAD QUESTION */
 function loadQuestion() {
-  document.getElementById("question").innerText = QUESTIONS[index];
-  document.getElementById("answer").value = "";
-  document.getElementById("scrollArea").scrollTop = 0;
+  const q = document.getElementById("question");
 
+  q.classList.remove("scrolling-question");
+  void q.offsetWidth;
+
+  q.innerText = QUESTIONS[index];
+  q.classList.add("scrolling-question");
+
+  document.getElementById("answer").value = "";
   answerTimeLeft = ANSWER_TIME;
   updateTimer();
 
   clearTimeout(questionTimer);
   clearInterval(answerTimer);
 
-  questionTimer = setTimeout(() => {
-    document.getElementById("question").innerText = "";
-  }, QUESTION_VISIBLE_TIME * 1000);
+  questionTimer = setTimeout(() => q.innerText = "",
+    QUESTION_VISIBLE_TIME * 1000);
 
   answerTimer = setInterval(() => {
     answerTimeLeft--;
@@ -203,7 +340,7 @@ function updateTimer() {
     `Answer time left: ${answerTimeLeft}s`;
 }
 
-/* NEXT QUESTION */
+/* NEXT */
 function nextQuestion() {
   if (examFinished) return;
 
@@ -213,23 +350,16 @@ function nextQuestion() {
   answers.push(document.getElementById("answer").value);
   index++;
 
-  if (index < QUESTIONS.length) {
-    loadQuestion();
-  } else {
-    normalFinish();
-  }
+  index < QUESTIONS.length ? loadQuestion() : normalFinish();
 }
 
-/* NORMAL FINISH */
+/* FINISH */
 function normalFinish() {
   examFinished = true;
-
   clearTimeout(questionTimer);
   clearInterval(answerTimer);
-
   exitFullscreen();
   sendAnswersByEmail();
-
   alert("Exam completed. Please send the email to submit your answers.");
   goToLogin();
 }
@@ -237,12 +367,12 @@ function normalFinish() {
 /* VIOLATION */
 function violationFinish(reason) {
   if (examFinished) return;
-  examFinished = true;
 
+  examFinished = true;
   clearTimeout(questionTimer);
   clearInterval(answerTimer);
-
   exitFullscreen();
+
   alert(reason + "\nExam terminated.");
   goToLogin();
 }
@@ -256,57 +386,40 @@ function goToLogin() {
 /* EMAIL */
 function sendAnswersByEmail() {
   let body =
-    `Student Name: ${studentName}\n` +
-    `Student Email: ${studentEmail}\n\n`;
+    `Name: ${studentName}\nEmail: ${studentEmail}\nRole: ${studentRole}\n\n`;
 
   QUESTIONS.forEach((q, i) => {
-    body += `Question ${i + 1}:\n${q}\n\n`;
-    body += `Answer:\n${answers[i] || "No answer"}\n`;
-    body += `------------------------------\n\n`;
+    body += `Q${i+1}: ${q}\nAnswer:\n${answers[i] || "No answer"}\n\n`;
   });
 
-  const subject = encodeURIComponent(`Exam Submission — ${studentName}`);
-  const emailBody = encodeURIComponent(body);
-
   window.location.href =
-    `mailto:career@ttcecs.com?subject=${subject}&body=${emailBody}`;
+    `mailto:career@ttcecs.com?subject=Exam Submission — ${studentName}&body=${encodeURIComponent(body)}`;
 }
 
-/* TAB SWITCH */
+/* SECURITY */
 document.addEventListener("visibilitychange", () => {
   if (document.hidden && !examFinished) {
     violationFinish("Tab switching detected");
   }
 });
 
-/* BLOCK COPY / PASTE */
-document.addEventListener("keydown", (e) => {
-  if (
-    (e.ctrlKey || e.metaKey) &&
-    (e.key.toLowerCase() === "c" || e.key.toLowerCase() === "v")
-  ) {
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && ["c","v"].includes(e.key.toLowerCase())) {
     e.preventDefault();
-    alert("Copy / Paste is not allowed");
+    alert("Copy / Paste not allowed");
   }
 });
 
-/* DISABLE RIGHT CLICK */
 document.addEventListener("contextmenu", e => e.preventDefault());
 
-/* PAGE EXIT BLOCK */
 window.onbeforeunload = () => {
   if (!examFinished) return "Exam in progress";
 };
 
-/* EXIT FULLSCREEN */
 function exitFullscreen() {
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  }
+  document.fullscreenElement && document.exitFullscreen();
 }
 </script>
 
 </body>
 </html>
-
-
