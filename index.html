@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Secure Descriptive Exam</title>
+
 <!-- Browser Tab Icon -->
 <link rel="icon" type="image/png" href="image.png">
+
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -14,6 +16,16 @@
 
   <!-- LOGIN -->
   <div id="login">
+
+    <!-- 🔹 HEADER IMAGE -->
+    <div class="flex justify-center mb-4">
+      <img
+        src="THECOS_Google_Form_Header.png"
+        alt="THECOS Header"
+        class="max-h-24 object-contain"
+      />
+    </div>
+
     <h1 class="text-2xl font-bold text-center mb-4">Online Exam</h1>
 
     <input id="studentName" type="text" placeholder="Enter Full Name"
@@ -127,12 +139,10 @@ function loadQuestion() {
   clearTimeout(questionTimer);
   clearInterval(answerTimer);
 
-  // Hide question after 10 seconds
   questionTimer = setTimeout(() => {
     document.getElementById("question").innerText = "";
   }, QUESTION_VISIBLE_TIME * 1000);
 
-  // Answer timer
   answerTimer = setInterval(() => {
     answerTimeLeft--;
     updateTimer();
@@ -163,7 +173,7 @@ function nextQuestion() {
   }
 }
 
-/* NORMAL FINISH → EMAIL */
+/* NORMAL FINISH */
 function normalFinish() {
   examFinished = true;
 
@@ -190,7 +200,13 @@ function violationFinish(reason) {
   goToLogin();
 }
 
-/* EMAIL LOGIC */
+/* GO BACK */
+function goToLogin() {
+  document.getElementById("exam").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+}
+
+/* EMAIL */
 function sendAnswersByEmail() {
   let body =
     `Student Name: ${studentName}\n` +
@@ -205,10 +221,8 @@ function sendAnswersByEmail() {
   const subject = encodeURIComponent(`Exam Submission — ${studentName}`);
   const emailBody = encodeURIComponent(body);
 
-  const mailto =
+  window.location.href =
     `mailto:surirupesh2001@gmail.com?subject=${subject}&body=${emailBody}`;
-
-  window.location.href = mailto;
 }
 
 /* TAB SWITCH */
@@ -218,7 +232,7 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-/* BLOCK CTRL+C / CTRL+V / CMD+C / CMD+V */
+/* BLOCK COPY / PASTE */
 document.addEventListener("keydown", (e) => {
   if (
     (e.ctrlKey || e.metaKey) &&
@@ -247,4 +261,3 @@ function exitFullscreen() {
 
 </body>
 </html>
-
