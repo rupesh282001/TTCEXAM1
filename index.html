@@ -18,6 +18,12 @@
   animation: scrollRightToLeft 10s linear 2 forwards;
 }
 </style>
+<script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="text/javascript">
+  emailjs.init('AQrOoA9vgEUwlbyma'); // ✅ your public key
+</script>
 </head>
 
 <body class="bg-slate-100 h-screen overflow-hidden flex items-center justify-center">
@@ -340,9 +346,8 @@ function normalFinish() {
   clearInterval(answerTimer);
   exitFullscreen();
   sendAnswersByEmail();
-  alert("Exam completed. Please send the email to submit your answers.");
-  goToLogin();
 }
+
 
 /* GO BACK */
 function goToLogin() {
@@ -350,18 +355,34 @@ function goToLogin() {
   document.getElementById("login").classList.remove("hidden");
 }
 
-/* EMAIL */
+/* EMAIL (EmailJS v4) */
 function sendAnswersByEmail() {
-  let body =
-    `Name: ${studentName}\nEmail: ${studentEmail}\nRole: ${studentRole}\n\n`;
+  let formattedAnswers = "";
 
   QUESTIONS.forEach((q, i) => {
-    body += `Q${i+1}: ${q}\nAnswer:\n${answers[i] || "No answer"}\n\n`;
+    formattedAnswers += `Q${i + 1}: ${q}\n`;
+    formattedAnswers += `Answer:\n${answers[i] || "No answer"}\n\n`;
   });
 
-  window.location.href =
-    `mailto:career@ttcecs.com?subject=Exam Submission — ${studentName}&body=${encodeURIComponent(body)}`;
+  emailjs.send(
+    "service_8yr4zf5",   // ✅ Gmail service ID
+    "template_kyqnyrd",  // ✅ your template ID
+    {
+      student_name: studentName,
+      student_email: studentEmail,
+      student_role: studentRole,
+      answers: formattedAnswers,
+      reply_to: studentEmail
+    }
+  ).then(() => {
+    alert("Exam submitted successfully");
+    goToLogin(); // back to home
+  }).catch(err => {
+    alert("Submission failed. Please contact admin.");
+    console.error("EmailJS Error:", err);
+  });
 }
+
 
 /* SECURITY */
 document.addEventListener("visibilitychange", () => {
@@ -391,5 +412,4 @@ function exitFullscreen() {
 
 </body>
 </html>
-
 
