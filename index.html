@@ -49,6 +49,8 @@
     <option value="">Select Role</option>
     <option value="assistant">Assistant Secretary</option>
     <option value="junior">Junior Executive</option>
+    <option value="senior">Senior Executive</option>
+    <option value="ldc">Lower Division Clerk</option>
   </select>
 
   <button onclick="startExam()"
@@ -247,6 +249,163 @@ const QUESTIONS_JUNIOR_EXECUTIVE = [
 
 "What is the importance of Environmental Impact Assessment (EIA) in project planning?"
 ];
+
+const QUESTIONS_SENIOR_EXECUTIVE = [
+  "Discuss the significance of Financial Forecasting and Budgetary Control.",
+  "What is Risk Management in Finance? Explain its importance.",
+  "Discuss the role of Financial Statements in evaluating organizational performance.",
+  "What is a co-operative? Explain its basic principles.",
+  "What is Cost Management, and how does it contribute to profitability?",
+  "What are the different types of co-operatives? Explain briefly.",
+  "Explain the management structure of a co-operative society.",
+  "What is the role of government in the co-operative sector?",
+  "Explain the relevance of co-operatives in the present economic scenario.",
+  "Define Management and explain its role at the senior executive level.",
+  "Discuss the role of leadership in effective management.",
+  "What is Risk Management? Explain its relevance for senior executives.",
+  "Explain the role and responsibilities of a Senior Executive in an organization.",
+  "Explain the concept of democracy.",
+  "What are the main functions of a government?",
+  "What is the difference between a presidential and parliamentary system?",
+  "What is the difference between a presidential and parliamentary system?",
+  "What is the significance of elections in a democracy?",
+  "What is corporate environmental responsibility (CER) and why is it critical for senior executives?",
+  "How can environmental sustainability be integrated into corporate strategy?",
+  "Critically examine the role of State Governments in balancing economic growth with social equity in policy formulation.",
+  "Evaluate the role of monitoring and evaluation (M&E) systems in improving the effectiveness of State Government policies.",
+  "Discuss the importance of Centre–State relations in Union Government policymaking and implementation. How can cooperative federalism be strengthened?",
+  "Discuss the role of a Senior Executive (Discipline) in strengthening organizational governance and ethical standards.",
+  "Describe the responsibilities of a Senior Executive (Discipline) in handling major penalty cases and sensitive misconduct matters.",
+  "Highlight the importance of documentation, reporting, and review mechanisms in disciplinary administration at the senior executive level.",
+  "Explain how you would lead a marketing team to improve brand positioning in a saturated market.",
+  "Describe a time when you had to handle a marketing crisis or manage a brand reputation issue. What steps did you take, and what was the outcome?",
+  "With a limited marketing budget, how would you decide between short-term campaigns for immediate sales and long-term brand-building initiatives?",
+  "Can you share an example of how you managed conflicting schedules, high-level meetings, and tight deadlines while ensuring punctuality and efficiency? What tools or strategies did you use?",
+  "Tell us about a time when you had to address a punctuality or time-management issue within your team or department. How did you handle it, and what were the results?",
+  "How do you personally ensure punctuality and reliability in your daily executive responsibilities, particularly when overseeing multiple teams or high-stakes projects?",
+  "Ethics, Risk Management, and Corporate Governance - Explain.",
+  "A senior executive must balance compliance with business strategy. How would you evaluate the impact of GST on pricing, supply chain decisions, and profitability? Provide an example of how GST considerations could influence strategic business decisions.",
+  "PAN is critical for tax compliance and financial transactions in India. How would you design a framework to ensure that all employees, clients, and vendors have valid PANs and that the organization remains compliant with regulatory requirements?",
+  "Describe a situation where an incorrect or missing PAN caused issues for the company, such as delayed tax filings or TDS discrepancies. How would you lead your team to identify, rectify, and prevent such issues in the future?",
+  "Organizational Ethics and Culture – Specify.",
+  "Handling Conflicts of Interest and Accountability – Explain.",
+  "Continuous Performance Improvement – Explain.",
+  "How does the Constitution of India recognize and promote co-operative societies?",
+  "Explain the significance of the 97th Constitutional Amendment for co-operative societies.",
+  "What is Part IX-B of the Constitution and why is it important for governance of co-operative societies?",
+  "How are legislative powers over co-operative societies distributed under the Constitution?",
+  "What constitutional safeguards exist to ensure democratic control in co-operative societies?",
+  "Explain the role of Article 43B in strengthening co-operative institutions?",
+  "How does the Constitution balance state regulation and autonomy of co-operative societies?",
+  "What is the constitutional role of co-operative societies in achieving economic democracy?",
+  "Can a co-operative society’s board be superseded under the Constitution?",
+  "What is the role of Secretary in a Co-operative Society?",
+  "Explain the Leadership Qualities."
+];
+
+const QUESTIONS_LOWER_DEVISION_CLERK = [
+"What is Finance, and why is it important for an organization?",
+
+"Explain the concept of Financial Planning.",
+
+"What are the main objectives of Financial Management?",
+
+"What is Working Capital, and why is it important?",
+
+"Explain the difference between Capital Expenditure and Revenue Expenditure.",
+
+"What is Budgeting, and what are its advantages?",
+
+"Explain the concept of Cash Flow.",
+
+"What are Financial Statements, and why are they important?",
+
+"What is the role of a Junior Executive in the Finance Department?",
+
+"Explain the importance of Internal Control in Finance.",
+
+"What is a Co-operative? Explain its basic concept.",
+
+"Explain the main objectives of the Co-operative Movement.",
+
+"Describe the principles of Co-operation.",
+
+"What are the different types of Co-operative Societies?",
+
+"Explain the importance of Co-operatives in economic development.",
+
+"What is the organizational structure of a Co-operative Society?",
+
+"Explain the role of a Junior Executive in a Co-operative Society.",
+
+"What is the importance of Membership in a Co-operative Society?",
+
+"Explain the concept of Democratic Management in Co-operatives.",
+
+"What is the role of Co-operative Education and Training?",
+
+"What is Management? Explain its importance in an organization.",
+
+"Explain the main functions of management.",
+
+"What is Planning? Discuss its significance.",
+
+"Define Organizing and explain its process.",
+
+"What is Staffing? Why is it important?",
+
+"Explain the concept of Motivation.",
+
+"What is Leadership? State its qualities.",
+
+"Define Communication and explain its importance in management.",
+
+"What is Controlling? Describe its steps.",
+
+"Explain the role of a Junior Executive in an organization.",
+
+"What is politics and why is it important in society?",
+
+"Explain the concept of democracy.",
+
+"What are the main functions of a government?",
+
+"Define political parties and their role.",
+
+"What is the difference between a presidential and parliamentary system?",
+
+"What is the meaning of political ideology?",
+
+"Explain the concept of separation of powers.",
+
+"What is the significance of elections in a democracy?",
+
+"Define civil rights and give examples.",
+
+"How does public policy impact society?",
+
+"What is environmental sustainability and why is it important for businesses?",
+
+"Explain the main causes of air pollution.",
+
+"What are the major types of waste, and how can they be managed?",
+
+"How does climate change affect the environment and businesses?",
+
+"What is the role of environmental policies in an organization?",
+
+"Explain the concept of carbon footprint and how it can be reduced.",
+
+"What are renewable and non-renewable resources? Give examples.",
+
+"Describe the concept of circular economy.",
+
+"How can businesses contribute to environmental conservation?",
+
+"What is the importance of Environmental Impact Assessment (EIA) in project planning?"
+];
+
+
 /* ================================================= */
 
 const QUESTION_VISIBLE_TIME = 20; // seconds
@@ -269,9 +428,32 @@ function startExam() {
     return;
   }
 
-  QUESTIONS = studentRole === "assistant"
-    ? QUESTIONS_ASSISTANT_SECRETARY
-    : QUESTIONS_JUNIOR_EXECUTIVE;
+  //QUESTIONS = studentRole === "assistant"
+    //? QUESTIONS_ASSISTANT_SECRETARY
+    //: QUESTIONS_JUNIOR_EXECUTIVE;
+	
+	switch (studentRole) {
+  case "assistant":
+    QUESTIONS = QUESTIONS_ASSISTANT_SECRETARY;
+    break;
+
+  case "junior":
+    QUESTIONS = QUESTIONS_JUNIOR_EXECUTIVE;
+    break;
+
+  case "senior":
+    QUESTIONS = QUESTIONS_SENIOR_EXECUTIVE;
+    break;
+
+  case "ldc":
+    QUESTIONS = QUESTIONS_LOWER_DEVISION_CLERK;
+    break;
+
+  default:
+    alert("Invalid role selected");
+    return;
+}
+
 
   resetState();
 
