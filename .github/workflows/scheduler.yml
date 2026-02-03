@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Switch page based on time
@@ -21,25 +21,11 @@ jobs:
           HOUR=$(date -u +"%H")
 
           if [ "$HOUR" -eq 15 ]; then
-            echo "ACTIVATING"
-            cat > index.html <<EOF
-            <html>
-              <body>
-                <h1>✅ EXAM LINK ACTIVE</h1>
-                <p>You can access the exam now.</p>
-              </body>
-            </html>
-            EOF
+            echo "Activating exam"
+            cp active.html index.html
           else
-            echo "DEACTIVATING"
-            cat > index.html <<EOF
-            <html>
-              <body>
-                <h1>⛔ EXAM CLOSED</h1>
-                <p>The exam is available only between 9 PM and 12 AM.</p>
-              </body>
-            </html>
-            EOF
+            echo "Deactivating exam"
+            cp inactive.html index.html
           fi
 
       - name: Commit changes
