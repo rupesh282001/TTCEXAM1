@@ -1,0 +1,51 @@
+name: Timed Link Scheduler
+
+on:
+  schedule:
+    # 9:00 PM IST → 15:30 UTC
+    - cron: '30 15 * * *'
+    # 12:00 AM IST → 18:30 UTC
+    - cron: '30 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  toggle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Switch page based on time
+        run: |
+          HOUR=$(date -u +"%H")
+
+          if [ "$HOUR" -eq 15 ]; then
+            echo "ACTIVATING"
+            cat > index.html <<EOF
+            <html>
+              <body>
+                <h1>✅ EXAM LINK ACTIVE</h1>
+                <p>You can access the exam now.</p>
+              </body>
+            </html>
+            EOF
+          else
+            echo "DEACTIVATING"
+            cat > index.html <<EOF
+            <html>
+              <body>
+                <h1>⛔ EXAM CLOSED</h1>
+                <p>The exam is available only between 9 PM and 12 AM.</p>
+              </body>
+            </html>
+            EOF
+          fi
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add index.html
+          git commit -m "Auto toggle exam page" || echo "No changes"
+          git push
